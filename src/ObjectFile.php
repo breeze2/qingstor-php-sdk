@@ -10,7 +10,7 @@ class ObjectFile
     public function __construct(Bucket $bucket, $key)
     {
         $this->bucket = $bucket;
-        $this->key = $key;
+        $this->key    = $key;
     }
 
     public function getServiceConfig()
@@ -30,17 +30,16 @@ class ObjectFile
 
     public function getHost()
     {
-        $host = $this->getBucketZone().'.'.Config::BASE_HOST;
+        $host = $this->getBucketZone() . '.' . Config::BASE_HOST;
         return $host;
     }
 
-    public function makeUri($path)
+    public function makeUri()
     {
         $uri = $this->getServiceConfig()->getProtocol() . '://';
         $uri .= $this->getHost();
         $uri .= '/' . $this->getBucketName();
         $uri .= '/' . $this->key;
-        $uri .= $path;
         return $uri;
     }
 
@@ -49,12 +48,26 @@ class ObjectFile
         return $this->bucket->sendRequest($request, $options);
     }
 
+    /**
+     * [API ObjectFile Delete]
+     * return [GuzzleHttp\Psr7\Response] [response]
+     */
+    public function delete()
+    {
+        $method  = 'DELETE';
+        $uri     = $this->makeUri();
+        $request = new Request($method, $uri);
+        return $this->sendRequest($request);
+    }
+
+    /**
+     * [API ObjectFile Head]
+     * return [GuzzleHttp\Psr7\Response] [response]
+     */
     public function head()
     {
-        $method = 'HEAD';
-        $path   = '';
-
-        $uri     = $this->makeUri($path);
+        $method  = 'HEAD';
+        $uri     = $this->makeUri();
         $request = new Request($method, $uri);
         return $this->sendRequest($request);
     }
