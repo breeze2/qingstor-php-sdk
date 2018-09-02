@@ -1,0 +1,27 @@
+{
+    "name": "breeze2/qingstor",
+    "description": "qingcloud object storage service sdk",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Breeze",
+            "email": "805511939@qq.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "BL\\QingStor\\": "src/"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~7.0"
+    },
+    "archive": {
+        "exclude": ["/docs", "/tests"]
+    }
+}
