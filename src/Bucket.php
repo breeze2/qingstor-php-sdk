@@ -104,9 +104,9 @@ class Bucket
     public function head()
     {
         $method = 'HEAD';
-        $path = '/';
+        $path   = '/';
 
-        $uri = $this->makeUri($path);
+        $uri     = $this->makeUri($path);
         $request = new Request($method, $uri);
         return $this->service->sendRequest($request);
     }

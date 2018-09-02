@@ -6,12 +6,12 @@ use GuzzleHttp\Psr7\Request as Psr7Request;
 
 class Request extends Psr7Request
 {
-	public function __construct($method, $uri, array $headers = [], $body = null, $version = '1.1')
-	{
-		array_key_exists('Date', $headers) ? null : $headers['Date'] = gmdate('D, d M Y H:i:s T');
-		array_key_exists('Content-Type', $headers) ? null : $headers['Content-Type'] = 'application/octet-stream';
-		parent::__construct($method, $uri, $headers, $body, $version);
-	}
+    public function __construct($method, $uri, array $headers = [], $body = null, $version = '1.1')
+    {
+        array_key_exists('Date', $headers) ? null : $headers['Date']                 = gmdate('D, d M Y H:i:s T');
+        array_key_exists('Content-Type', $headers) ? null : $headers['Content-Type'] = 'application/octet-stream';
+        parent::__construct($method, $uri, $headers, $body, $version);
+    }
 
     public function getDate()
     {
@@ -37,12 +37,10 @@ class Request extends Psr7Request
                 $keys[trim(strtolower($key))] = trim($value[0]);
             }
         }
-        ksort($keys);
+        sort($keys);
         $canonicalizedHeaders = '';
-        if (count($keys) > 0) {
-            foreach ($keys as $key => $value) {
-                $canonicalizedHeaders = $canonicalizedHeaders . $key . ':' . $value . "\n";
-            }
+        foreach ($keys as $key => $value) {
+            $canonicalizedHeaders = $canonicalizedHeaders . $key . ':' . $value . "\n";
         }
 
         return $canonicalizedHeaders;
