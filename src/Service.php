@@ -13,12 +13,12 @@ class Service
         $this->config = $config;
     }
 
-    private function getHost()
+    public function getHost()
     {
         return Config::BASE_HOST;
     }
 
-    private function makeUri($path)
+    public function makeUri($path)
     {
         $uri = $this->config->getProtocol() . '://';
         $uri .= $this->getHost();
@@ -26,7 +26,7 @@ class Service
         return $uri;
     }
 
-    private function makeAuthSignature(Request $request)
+    public function makeAuthSignature(Request $request)
     {
         $str = $request->getMethod() . "\n";
         $str .= $request->getContentMD5() . "\n";
@@ -40,7 +40,7 @@ class Service
         return $sign64;
     }
 
-    private function makeAuthorization($sign64)
+    public function makeAuthorization($sign64)
     {
         $auth = 'QS ' . $this->config->getAccessKeyId() . ':' . $sign64;
         return $auth;

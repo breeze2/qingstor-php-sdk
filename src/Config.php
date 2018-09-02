@@ -6,11 +6,11 @@ class Config
 {
     const BASE_HOST = 'qingstor.com';
 
-    private $access_key_id     = '';
-    private $secret_access_key = '';
-    private $default_bucket    = '';
-    private $default_location  = '';
-    private $protocol          = 'https';
+    protected $access_key_id     = '';
+    protected $secret_access_key = '';
+    protected $default_bucket    = '';
+    protected $default_location  = '';
+    protected $protocol          = 'https';
 
     public function __construct($access_key_id = '', $secret_access_key = '', array $options = [])
     {

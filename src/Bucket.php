@@ -15,30 +15,53 @@ class Bucket
         $this->zone    = $zone;
     }
 
-    private function getConfig()
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getZone()
+    {
+        return $this->zone;
+    }
+
+    public function getServiceConfig()
     {
         return $this->service->getConfig();
     }
 
-    private function getHost()
+    public function getHost()
     {
         // $host = $this->name.'.'.$this->zone.'.'.Config::BASE_HOST;
         $host = $this->zone . '.' . Config::BASE_HOST;
         return $host;
     }
 
-    private function makeUri($path)
+    public function makeUri($path)
     {
-        $uri = $this->getConfig()->getProtocol() . '://';
+        $uri = $this->getServiceConfig()->getProtocol() . '://';
         $uri .= $this->getHost();
         $uri .= '/' . $this->name;
         $uri .= $path;
         return $uri;
     }
 
-    private function makeContentMd5($str)
+    public function makeContentMd5($str)
     {
         return base64_encode(md5($str, true));
+    }
+
+    public function makeObjectFile($key)
+    {
+        if ($key) {
+            return new ObjectFile($this, $key);
+        }
+        return null;
+    }
+
+    public function sendRequest(Request $request, array $options = [])
+    {
+        return $this->service->sendRequest($request, $options);
     }
 
     /**
@@ -60,7 +83,7 @@ class Bucket
 
         $uri     = $this->makeUri($path);
         $request = new Request($method, $uri, $headers);
-        return $this->service->sendRequest($request, $options);
+        return $this->sendRequest($request, $options);
     }
 
     /**
@@ -94,7 +117,7 @@ class Bucket
 
         $uri     = $this->makeUri($path);
         $request = new Request($method, $uri, $headers, $body);
-        return $this->service->sendRequest($request, $options);
+        return $this->sendRequest($request, $options);
     }
 
     /**
@@ -108,7 +131,7 @@ class Bucket
 
         $uri     = $this->makeUri($path);
         $request = new Request($method, $uri);
-        return $this->service->sendRequest($request);
+        return $this->sendRequest($request);
     }
 
     /**
@@ -122,7 +145,7 @@ class Bucket
 
         $uri     = $this->makeUri($path);
         $request = new Request($method, $uri);
-        return $this->service->sendRequest($request);
+        return $this->sendRequest($request);
     }
 
     /**
@@ -136,7 +159,7 @@ class Bucket
 
         $uri     = $this->makeUri($path);
         $request = new Request($method, $uri);
-        return $this->service->sendRequest($request);
+        return $this->sendRequest($request);
     }
 
 }
