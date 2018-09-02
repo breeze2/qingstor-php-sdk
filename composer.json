@@ -12,7 +12,8 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "BL\\QingStor\\": "src/"
+            "BL\\QingStor\\": "src/",
+            "BL\\Tests\\": "tests/"
         }
     },
     "require": {
