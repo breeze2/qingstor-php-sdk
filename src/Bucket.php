@@ -66,8 +66,8 @@ class Bucket
 
     /**
      * [API Bucket List Objects]
-     * param  array  $options [description]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @param  array  $options
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function listObjects(array $options = [])
     {
@@ -88,8 +88,8 @@ class Bucket
 
     /**
      * [API Bucket Delete Objects]
-     * param  array  $options [request options]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @param  array  $options
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function deleteObjects(array $options = [])
     {
@@ -122,7 +122,7 @@ class Bucket
 
     /**
      * [API Bucket Head]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function head()
     {
@@ -136,7 +136,7 @@ class Bucket
 
     /**
      * [API Bucket Create]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function create()
     {
@@ -150,12 +150,31 @@ class Bucket
 
     /**
      * [API Bucket Delete]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function delete()
     {
         $method = 'DELETE';
         $path   = '/';
+
+        $uri     = $this->makeUri($path);
+        $request = new Request($method, $uri);
+        return $this->sendRequest($request);
+    }
+
+    /**
+     * [API Bucket Stats]
+     * @param  array  $options
+     * @return \GuzzleHttp\Psr7\Response [response]
+     */
+    public function stats(array $options = [])
+    {
+        $method = 'GET';
+        $path   = '/?stats';
+
+        if (array_key_exists('query', $options) && is_array($options['query'])) {
+            $options['query']['stats'] = 1;
+        }
 
         $uri     = $this->makeUri($path);
         $request = new Request($method, $uri);

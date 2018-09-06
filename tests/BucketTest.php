@@ -21,23 +21,33 @@ final class BucketTest extends TestCase
         $this->assertEquals(1, 1);
     }
 
-    public function testDeleteObjects()
-    {
-        $config   = new ConfigTest();
-        $service  = new Service($config);
-        $bucket   = $service->makeBucket('bl-test', 'pek3b');
-        $response = $bucket->deleteObjects(['json' => ['objects' => [['key' => 'favicon.png']]]]);
-        print_r(json_decode($response->getBody()->getContents()));
-        $this->assertEquals(1, 1);
-    }
+    // public function testDeleteObjects()
+    // {
+    //     $config   = new ConfigTest();
+    //     $service  = new Service($config);
+    //     $bucket   = $service->makeBucket('bl-test', 'pek3b');
+    //     $response = $bucket->deleteObjects(['json' => ['objects' => [['key' => 'favicon.png']]]]);
+    //     print_r(json_decode($response->getBody()->getContents()));
+    //     $this->assertEquals(1, 1);
+    // }
 
     public function testHead()
     {
         $config   = new ConfigTest();
         $service  = new Service($config);
-        $bucket   = $service->makeBucket('bl-test1', 'pek3b');
+        $bucket   = $service->makeBucket('bl-test', 'pek3b');
         $response = $bucket->head();
         print_r($response->getStatusCode());
+        $this->assertEquals(1, 1);
+    }
+
+    public function testStats()
+    {
+        $config   = new ConfigTest();
+        $service  = new Service($config);
+        $bucket   = $service->makeBucket('bl-test', 'pek3b');
+        $response = $bucket->stats();
+        print_r(json_decode($response->getBody()->getContents()));
         $this->assertEquals(1, 1);
     }
 
@@ -45,7 +55,7 @@ final class BucketTest extends TestCase
     // {
     //     $config   = new ConfigTest();
     //     $service  = new Service($config);
-    //     $bucket   = $service->makeBucket('bl-test1', 'pek3b');
+    //     $bucket   = $service->makeBucket('bl-test-12', 'pek3b');
     //     $response = $bucket->create();
     //     print_r($response->getBody()->getContents());
     //     $this->assertEquals(1, 1);
@@ -55,7 +65,7 @@ final class BucketTest extends TestCase
     // {
     //     $config   = new ConfigTest();
     //     $service  = new Service($config);
-    //     $bucket   = $service->makeBucket('bl-test1', 'pek3b');
+    //     $bucket   = $service->makeBucket('bl-test-12', 'pek3b');
     //     $response = $bucket->delete();
     //     print_r($response->getBody()->getContents());
     //     $this->assertEquals(1, 1);

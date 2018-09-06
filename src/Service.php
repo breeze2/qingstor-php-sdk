@@ -70,7 +70,7 @@ class Service
 
     /**
      * [API Service List Buckets]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function listBuckets()
     {
@@ -84,7 +84,7 @@ class Service
 
     /**
      * [API Service List Locations]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function ListLocations(array $options = [])
     {

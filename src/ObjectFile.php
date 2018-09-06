@@ -50,7 +50,7 @@ class ObjectFile
 
     /**
      * [API ObjectFile Delete]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function delete()
     {
@@ -62,7 +62,7 @@ class ObjectFile
 
     /**
      * [API ObjectFile Head]
-     * return [GuzzleHttp\Psr7\Response] [response]
+     * @return \GuzzleHttp\Psr7\Response [response]
      */
     public function head()
     {
