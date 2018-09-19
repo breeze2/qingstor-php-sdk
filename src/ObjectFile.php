@@ -50,7 +50,7 @@ class ObjectFile
 
     /**
      * [API ObjectFile Delete]
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function delete()
     {
@@ -62,7 +62,7 @@ class ObjectFile
 
     /**
      * [API ObjectFile Head]
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function head()
     {
@@ -70,5 +70,14 @@ class ObjectFile
         $uri     = $this->makeUri();
         $request = new Request($method, $uri);
         return $this->sendRequest($request);
+    }
+
+    /**
+     * [API ObjectFile Get]
+     * @return \GuzzleHttp\Psr7\Response
+     */
+    public function get()
+    {
+
     }
 }

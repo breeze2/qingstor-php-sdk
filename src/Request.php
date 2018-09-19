@@ -37,7 +37,7 @@ class Request extends Psr7Request
                 $keys[trim(strtolower($key))] = trim($value[0]);
             }
         }
-        sort($keys);
+        // sort($keys);
         $canonicalizedHeaders = '';
         foreach ($keys as $key => $value) {
             $canonicalizedHeaders = $canonicalizedHeaders . $key . ':' . $value . "\n";
@@ -62,7 +62,7 @@ class Request extends Psr7Request
                 }
             }
         }
-        sort($keys);
+        // sort($keys);
         $joinedKeys = implode('&', $keys);
         if ($joinedKeys !== '') {
             $path = $path . '?' . $joinedKeys;

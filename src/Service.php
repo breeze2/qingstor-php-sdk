@@ -40,6 +40,21 @@ class Service
         return $sign64;
     }
 
+    public function makeQuerySignature($path, $expires)
+    {
+        $str = "GET\n";
+        $str .= "\n";
+        $str .= "\n";
+        $str .= $expires . "\n";
+        $str .= "";
+        $str .= $path;
+
+        $sign    = hash_hmac('sha256', $str, $this->config->getSecretAccessKey(), true);
+        $sign64  = base64_encode($sign);
+        $signurl = urlencode($sign64);
+        return $signurl;
+    }
+
     public function makeAuthorization($sign64)
     {
         $auth = 'QS ' . $this->config->getAccessKeyId() . ':' . $sign64;
@@ -70,7 +85,7 @@ class Service
 
     /**
      * [API Service List Buckets]
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function listBuckets()
     {
@@ -84,7 +99,7 @@ class Service
 
     /**
      * [API Service List Locations]
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function ListLocations(array $options = [])
     {

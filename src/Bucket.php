@@ -64,10 +64,24 @@ class Bucket
         return $this->service->sendRequest($request, $options);
     }
 
+    public function makeObjectFileQuerySignature($key, $expires)
+    {
+        return $this->service->makeQuerySignature('/' . $this->name . '/' . $key, $expires);
+    }
+
+    public function makeObjectFilesQuerySignatures(array $keys, $expires)
+    {
+        $signs = [];
+        foreach ($keys as $key) {
+            $signs[] = $this->service->makeQuerySignature($this->name . '/' . $key, $expires);
+        }
+        return $signs;
+    }
+
     /**
      * [API Bucket List Objects]
      * @param  array  $options
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function listObjects(array $options = [])
     {
@@ -89,7 +103,7 @@ class Bucket
     /**
      * [API Bucket Delete Objects]
      * @param  array  $options
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function deleteObjects(array $options = [])
     {
@@ -122,7 +136,7 @@ class Bucket
 
     /**
      * [API Bucket Head]
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function head()
     {
@@ -136,7 +150,7 @@ class Bucket
 
     /**
      * [API Bucket Create]
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function create()
     {
@@ -150,7 +164,7 @@ class Bucket
 
     /**
      * [API Bucket Delete]
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function delete()
     {
@@ -165,7 +179,7 @@ class Bucket
     /**
      * [API Bucket Stats]
      * @param  array  $options
-     * @return \GuzzleHttp\Psr7\Response [response]
+     * @return \GuzzleHttp\Psr7\Response
      */
     public function stats(array $options = [])
     {

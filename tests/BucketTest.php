@@ -21,15 +21,15 @@ final class BucketTest extends TestCase
         $this->assertEquals(1, 1);
     }
 
-    // public function testDeleteObjects()
-    // {
-    //     $config   = new ConfigTest();
-    //     $service  = new Service($config);
-    //     $bucket   = $service->makeBucket('bl-test', 'pek3b');
-    //     $response = $bucket->deleteObjects(['json' => ['objects' => [['key' => 'favicon.png']]]]);
-    //     print_r(json_decode($response->getBody()->getContents()));
-    //     $this->assertEquals(1, 1);
-    // }
+    public function testDeleteObjects()
+    {
+        $config   = new ConfigTest();
+        $service  = new Service($config);
+        $bucket   = $service->makeBucket('bl-test', 'pek3b');
+        $response = $bucket->deleteObjects(['json' => ['objects' => [['key' => 'favicon.png']]]]);
+        print_r(json_decode($response->getBody()->getContents()));
+        $this->assertEquals(1, 1);
+    }
 
     public function testHead()
     {
@@ -51,24 +51,36 @@ final class BucketTest extends TestCase
         $this->assertEquals(1, 1);
     }
 
-    // public function testCreate()
-    // {
-    //     $config   = new ConfigTest();
-    //     $service  = new Service($config);
-    //     $bucket   = $service->makeBucket('bl-test-12', 'pek3b');
-    //     $response = $bucket->create();
-    //     print_r($response->getBody()->getContents());
-    //     $this->assertEquals(1, 1);
-    // }
+    public function testQuerySign()
+    {
+        $config   = new ConfigTest();
+        $service  = new Service($config);
+        $bucket   = $service->makeBucket('bl-test', 'pek3b');
+        $expires  = time()+120;
+        $sign = $bucket->makeObjectFileQuerySignature('favicon.png', $expires);
+        print_r($sign."\n");
+        print_r($expires);
+        $this->assertEquals(1, 1);
+    }
 
-    // public function testDelete()
-    // {
-    //     $config   = new ConfigTest();
-    //     $service  = new Service($config);
-    //     $bucket   = $service->makeBucket('bl-test-12', 'pek3b');
-    //     $response = $bucket->delete();
-    //     print_r($response->getBody()->getContents());
-    //     $this->assertEquals(1, 1);
-    // }
+    public function testCreate()
+    {
+        $config   = new ConfigTest();
+        $service  = new Service($config);
+        $bucket   = $service->makeBucket('bl-test-12', 'pek3b');
+        $response = $bucket->create();
+        print_r($response->getBody()->getContents());
+        $this->assertEquals(1, 1);
+    }
+
+    public function testDelete()
+    {
+        $config   = new ConfigTest();
+        $service  = new Service($config);
+        $bucket   = $service->makeBucket('bl-test-12', 'pek3b');
+        $response = $bucket->delete();
+        print_r($response->getBody()->getContents());
+        $this->assertEquals(1, 1);
+    }
 
 }
