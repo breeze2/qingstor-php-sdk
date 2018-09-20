@@ -64,16 +64,23 @@ class Bucket
         return $this->service->sendRequest($request, $options);
     }
 
+    public function makeObjectFileUploadSignature($key, $headers)
+    {
+        $path = '/' . $this->name . '/' . $key;
+        return $this->service->makeUploadSignature($path, $headers);
+    }
+
     public function makeObjectFileQuerySignature($key, $expires)
     {
-        return $this->service->makeQuerySignature('/' . $this->name . '/' . $key, $expires);
+        $path = '/' . $this->name . '/' . $key;
+        return $this->service->makeQuerySignature($path, $expires);
     }
 
     public function makeObjectFilesQuerySignatures(array $keys, $expires)
     {
         $signs = [];
         foreach ($keys as $key) {
-            $signs[] = $this->service->makeQuerySignature($this->name . '/' . $key, $expires);
+            $signs[] = $this->makeObjectFileQuerySignature($key, $expires);
         }
         return $signs;
     }

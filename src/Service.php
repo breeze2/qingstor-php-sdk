@@ -40,19 +40,47 @@ class Service
         return $sign64;
     }
 
-    public function makeQuerySignature($path, $expires)
+    /**
+     * [makeQuerySignature]
+     * @param  string $path
+     * @param  array  $headers
+     * @param  array|string|null $query
+     * @return string
+     */
+    public function makeQuerySignature($path, $expires, array $headers = [], $query = null)
     {
         $str = "GET\n";
-        $str .= "\n";
-        $str .= "\n";
+        $str .= ($headers['Content-MD5'] ?? '') . "\n";
+        $str .= ($headers['Content-Type'] ?? '') . "\n";
         $str .= $expires . "\n";
-        $str .= "";
-        $str .= $path;
+        $str .= Request::makeCanonicalizedHeaders($headers);
+        $str .= Request::makeCanonicalizedResource($path, $query);
 
         $sign    = hash_hmac('sha256', $str, $this->config->getSecretAccessKey(), true);
         $sign64  = base64_encode($sign);
         $signurl = urlencode($sign64);
         return $signurl;
+    }
+
+    /**
+     * [makeUploadSignature]
+     * @param  string $path
+     * @param  array  $headers
+     * @param  array|string|null $query
+     * @return string
+     */
+    public function makeUploadSignature($path, array $headers = [], $query = null)
+    {
+        $str = "PUT\n";
+        $str .= ($headers['Content-MD5'] ?? '') . "\n";
+        $str .= ($headers['Content-Type'] ?? '') . "\n";
+        $str .= "\n";
+        $str .= Request::makeCanonicalizedHeaders($headers);
+        $str .= Request::makeCanonicalizedResource($path, $query);
+
+        $sign   = hash_hmac('sha256', $str, $this->config->getSecretAccessKey(), true);
+        $sign64 = base64_encode($sign);
+        return $sign64;
     }
 
     public function makeAuthorization($sign64)

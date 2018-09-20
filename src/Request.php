@@ -30,48 +30,19 @@ class Request extends Psr7Request
 
     public function getCanonicalizedHeaders()
     {
-        $header = $this->getHeaders();
-        $keys   = array();
-        foreach ($header as $key => $value) {
-            if (!strncasecmp(strtolower($key), 'x-qs-', 5)) {
-                $keys[trim(strtolower($key))] = trim($value[0]);
-            }
-        }
-        // sort($keys);
-        $canonicalizedHeaders = '';
-        foreach ($keys as $key => $value) {
-            $canonicalizedHeaders = $canonicalizedHeaders . $key . ':' . $value . "\n";
-        }
-
-        return $canonicalizedHeaders;
+        $headers = $this->getHeaders();
+        return self::makeCanonicalizedHeaders($headers);
     }
 
     public function getCanonicalizedResource()
     {
         $uri   = $this->getUri();
         $path  = $uri->getPath();
-        $query = explode('&', $uri->getQuery());
-        $keys  = array();
-        foreach ($query as $values) {
-            $values = explode('=', $values);
-            if ($this->isSubResource($values[0])) {
-                if (count($values) > 1) {
-                    $keys[] = $values[0] . '=' . urldecode($values[1]);
-                } else {
-                    $keys[] = $values[0];
-                }
-            }
-        }
-        // sort($keys);
-        $joinedKeys = implode('&', $keys);
-        if ($joinedKeys !== '') {
-            $path = $path . '?' . $joinedKeys;
-        }
-
-        return $path;
+        $query = $uri->getQuery();
+        return self::makeCanonicalizedResource($path, $query);
     }
 
-    public function isSubResource($key)
+    public static function isSubResource($key)
     {
         $keysMap = array(
             'acl',
@@ -95,5 +66,61 @@ class Request extends Psr7Request
         );
 
         return in_array($key, $keysMap);
+    }
+
+    public static function makeCanonicalizedHeaders(array $headers = [])
+    {
+        $keys = [];
+        foreach ($headers as $key => $value) {
+            if (!strncasecmp(strtolower($key), 'x-qs-', 5)) {
+                $keys[trim(strtolower($key))] = trim($value);
+            }
+        }
+
+        ksort($keys);
+        $canonicalizedHeaders = '';
+        foreach ($keys as $key => $value) {
+            $canonicalizedHeaders = $canonicalizedHeaders . $key . ':' . $value . "\n";
+        }
+
+        return $canonicalizedHeaders;
+    }
+
+    public static function makeCanonicalizedResource($path, $query = null)
+    {
+        $keys = [];
+        if (is_string($query)) {
+            $query = explode('&', $query);
+            foreach ($query as $values) {
+                $values = explode('=', $values);
+                if (self::isSubResource($values[0])) {
+                    if (count($values) > 1) {
+                        $keys[] = $values[0] . '=' . urldecode($values[1]);
+                    } else {
+                        $keys[] = $values[0];
+                    }
+                }
+            }
+        } else if (is_array($query)) {
+            foreach ($query as $key => $value) {
+                if (self::isSubResource($key)) {
+                    if ($value) {
+                        $keys[] = $key . '=' . urldecode($value);
+                    } else {
+                        $keys[] = $key;
+                    }
+                }
+            }
+        } else {
+            $keys = [];
+        }
+
+        ksort($keys);
+        $joinedKeys = implode('&', $keys);
+        if ($joinedKeys !== '') {
+            $path = $path . '?' . $joinedKeys;
+        }
+
+        return $path;
     }
 }

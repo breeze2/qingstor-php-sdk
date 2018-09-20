@@ -62,6 +62,21 @@ final class BucketTest extends TestCase
         print_r($expires);
         $this->assertEquals(1, 1);
     }
+    
+    public function testUploadSign()
+    {
+        $config   = new ConfigTest();
+        $service  = new Service($config);
+        $bucket   = $service->makeBucket('bl-test', 'pek3b');
+        $headers = [
+            'Content-Type'=> 'application/octet-stream',
+            'x-qs-date'=>gmdate('D, d M Y H:i:s T')
+        ];
+        $sign = $bucket->makeObjectFileUploadSignature('f.txt', $headers);
+        print_r($sign."\n");
+        print_r($headers);
+        $this->assertEquals(1, 1);
+    }
 
     public function testCreate()
     {
